@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A10: Create and Display Cookies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        #cookie-display {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e6e6fa;
+            border: 1px solid #c3c3e6;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            word-wrap: break-word;
+        }
+        .status-message {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>A10: Cookie Creation and Display</h2>
+
+    <p>This page sets a cookie when it loads. **Please refresh the page (F5 or Ctrl+R)** to see the cookie displayed below.</p>
+
+    <p>
+        <button onclick="setCookieOnDemand()">Set/Update Cookie Now</button>
+    </p>
+
+    <h3>Current Cookie Stored in Your Browser:</h3>
+    <div id="cookie-display">Checking for cookies...</div>
+
+    <p id="status-message" class="status-message"></p>
+</div>
+
+<script>
+    // --- Functions to Manage Cookies ---
+
+    // Function to set the cookie
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        // Sets the cookie using the document.cookie property
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    // Function to read and display all cookies
+    function getAndDisplayCookies() {
+        const allCookies = document.cookie;
+        const displayElement = document.getElementById("cookie-display");
+
+        if (allCookies) {
+
+            displayElement.textContent = allCookies;
+        } else {
+            displayElement.textContent = "No cookies found. Please check if your browser allows cookies or refresh the page!";
+        }
+    }
+
+    // Function to set the cookie (used on page load and button click)
+    function setCookieOnLoad() {
+        // Cookie details
+        const cookieName = "IS117_AssignmentCookie";
+        // Use the current date/time as the value
+        const cookieValue = "LastVisit=" + new Date().toLocaleString();
+        const daysToExpire = 7;
+
+        setCookie(cookieName, cookieValue, daysToExpire);
+        document.getElementById('status-message').textContent = 'The test cookie has been set or updated.';
+    }
+
+    // Function linked to the button
+    function setCookieOnDemand() {
+        setCookieOnLoad();
+        getAndDisplayCookies();
+    }
+
+    setCookieOnLoad();
+
+    getAndDisplayCookies();
+
+</script>
+
+<footer>
+    <hr>
+    <p>&copy; Rachel Aravena - A10 - 11 / 18 / 2025</p>
+</footer>
+
+</body>
+</html>
