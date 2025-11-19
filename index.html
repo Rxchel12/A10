@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A10: Create and Display Cookies - IS117</title>
     <style>
-
+        /* Simple CSS for clarity and organization */
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
@@ -25,25 +25,26 @@
         #cookie-display {
             margin-top: 15px;
             padding: 15px;
-            background-color: #ecf0f1;
+            background-color: #ecf0f1; /* Light gray/silver */
             border: 1px solid #bdc3c7;
-            border-left: 5px solid #3498db;
+            border-left: 5px solid #3498db; /* Blue accent */
             border-radius: 5px;
             font-family: 'Courier New', monospace;
             word-wrap: break-word;
         }
         .status {
-            color: #27ae60;
+            color: #27ae60; /* Green for success */
             font-weight: bold;
         }
     </style>
 </head>
-<body onload="mainLogic()">
-
+<body onload="checkAndSetCookie()">
 <div class="container">
     <h2>A10: JavaScript Cookie Assignment</h2>
 
-    <p>This page runs a script to **set a cookie** on load. **Refresh the page (F5 or Ctrl+R)** to see the cookie displayed below. </p>
+    <p>This page asks for your name and sets a cookie. **Refresh the page (F5 or Ctrl+R)** to see your welcome message and the stored cookie below.</p>
+
+    <h3 id="welcome-message">Welcome!</h3>
 
     <h3>Cookies Stored in Your Browser:</h3>
     <p id="status-message" class="status"></p>
@@ -52,47 +53,79 @@
 </div>
 
 <script>
-
+    // --- 1. Function to Set a Cookie ---
     function setCookie(cname, cvalue, exdays) {
         const d = new Date();
-
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         let expires = "expires=" + d.toUTCString();
-
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 
-    function getAndDisplayAllCookies() {
+    // --- 2. Function to Get a Cookie Value (Crucial for checking existence) ---
+    function getCookie(cname) {
+        let name = cname + "=";
+        let ca = document.cookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    // --- 3. Function to Display ALL Cookies ---
+    function displayAllCookies() {
         const allCookies = document.cookie;
         const displayElement = document.getElementById("cookie-display");
 
         if (allCookies) {
-
             displayElement.textContent = allCookies;
         } else {
-            displayElement.textContent = "No cookies found. Please ensure cookies are enabled and refresh the page.";
+            displayElement.textContent = "No cookies found.";
         }
     }
 
-    function mainLogic() {
-        const cookieName = "IS117_A10_StudentCookie";
+    // --- 4. Main Logic: Check, Prompt, and Set/Display ---
+    function checkAndSetCookie() {
+        const cookieName = "IS117_UserName";
+        const daysToExpire = 365;
 
-        const cookieValue = "TimeSet=" + new Date().toLocaleString();
-        const daysToExpire = 7; // Expire in 7 days
+        // Try to retrieve the cookie value
+        let username = getCookie(cookieName);
 
+        if (username != "") {
+            // Cookie exists: Display welcome message and stored cookies
+            document.getElementById('welcome-message').textContent = "Welcome back, " + username + "!";
+            document.getElementById('status-message').textContent = "Cookie found and displayed below.";
 
-        setCookie(cookieName, cookieValue, daysToExpire);
-        document.getElementById('status-message').textContent = `Cookie "${cookieName}" has been set/updated successfully.`;
+        } else {
+            // Cookie does NOT exist: Trigger the prompt box
+            username = prompt("Please enter your name for the cookie assignment:", "");
 
-        getAndDisplayAllCookies();
+            if (username != "" && username != null) {
+                // User entered a name: Set the cookie
+                setCookie(cookieName, username, daysToExpire);
+                document.getElementById('welcome-message').textContent = "Welcome, " + username + "!";
+                document.getElementById('status-message').textContent = "Cookie has been set successfully. Refresh to see the welcome message!";
+            } else {
+                // User canceled or entered nothing
+                document.getElementById('welcome-message').textContent = "Welcome, visitor. No name saved.";
+            }
+        }
+
+        // Always display the current cookies in the browser
+        displayAllCookies();
     }
-
-    document.cookie = "IS117_AssignmentCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    document.cookie = "IS117_UserName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 </script>
 
 <footer>
     <hr>
-    <p>&copy; Rachel Aravena - A10 - 11 / 18 / 2025</p>
+    <p>&copy; Rachel Aravena - A10 - Due Date: Nov 20</p>
 </footer>
 
 </body>
