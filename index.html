@@ -67,7 +67,7 @@
         const displayElement = document.getElementById("cookie-display");
 
         if (allCookies) {
-            // Display the raw string of all cookies (e.g., cookie1=value; cookie2=value)
+
             displayElement.textContent = allCookies;
         } else {
             displayElement.textContent = "No cookies found. Please ensure cookies are enabled and refresh the page.";
@@ -76,7 +76,7 @@
 
     function mainLogic() {
         const cookieName = "IS117_A10_StudentCookie";
-        // Use the current date/time as a unique value
+
         const cookieValue = "TimeSet=" + new Date().toLocaleString();
         const daysToExpire = 7; // Expire in 7 days
 
